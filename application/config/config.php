@@ -1,5 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+
 date_default_timezone_set('Asia/Kolkata');
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,7 @@ date_default_timezone_set('Asia/Kolkata');
 | a PHP script and you can easily do that on your own.
 |
  */
-$config['base_url'] = 'http://localhost/afapi/';
+$config['base_url'] = 'http://example.com/';
 /*
 |--------------------------------------------------------------------------
 | KeyCDN URL
