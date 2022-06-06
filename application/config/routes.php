@@ -27,7 +27,7 @@ $route['socialLinks'] = 'test/socialLinks';
 
 // advertisement API
 $route['getAds'] = 'test/getAds';
-$route['getAds/category'] = 'test/getAdsCategory';
+$route['getAdsCategory'] = 'test/getAdsCategory';
 $route['getAdsArticle'] = 'test/getAdsArticle';
 $route['getScriptAds'] = 'test/getScriptAds';
 
@@ -38,8 +38,8 @@ $route['videos']= 'test/videos';
 $route['marketAPI']= 'test/marketAPI';
 
 // Testing
-$route['test'] = 'test/test';
-$route['test/getTest'] = 'test/getDataFromSqlTest';
+// $route['test'] = 'test/test';
+// $route['test/getTest'] = 'test/getDataFromSqlTest';
 
 
 ######################### -: Always First API :- #########################

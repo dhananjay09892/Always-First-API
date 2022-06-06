@@ -1,0 +1,7 @@
+# Ignore Old Folder
+/Old/
+/customer_uploads/
+/marketing_uploads/
+/application/config/database.php
+/application/config/config.php
+/application/config/config.php.bak
