@@ -28,8 +28,8 @@ $route['socialLinks'] = 'test/socialLinks';
 // advertisement API
 $route['getAds'] = 'test/getAds';
 $route['getAdsCategory'] = 'test/getAdsCategory';
-$route['getAdsArticle'] = 'test/getAdsArticle';
-$route['getScriptAds'] = 'test/getScriptAds';
+// $route['getAdsArticle'] = 'test/getAdsArticle';
+// $route['getScriptAds'] = 'test/getScriptAds';
 
 $route['feedback'] = 'test/feedback';
 $route['privacyPolicy'] = 'test/privacyPolicy';
@@ -37,63 +37,12 @@ $route['termsAndConditions'] = 'test/termsAndConditions';
 $route['videos']= 'test/videos';
 $route['marketAPI']= 'test/marketAPI';
 
-// Testing
-// $route['test'] = 'test/test';
-// $route['test/getTest'] = 'test/getDataFromSqlTest';
+// login API
 
-
-######################### -: Always First API :- #########################
-
-// $route['posts'] = 'afposts/getPosts';
-// $route['posts/page/(:any)'] = 'afposts/getPostsPage/$1';
-// $route['posts/category/(:any)'] = 'afposts/getPostsCategory/$1';
-// $route['posts/category/(:any)/page/(:any)'] = 'afposts/getPostsCategoryPage/$1/$2';
-// $route['posts/tag/(:any)'] = 'afposts/getPostsTag/$1';
-// $route['posts/tag/(:any)/page/(:any)'] = 'afposts/getPostsTagPage/$1/$2';
-// $route['search/(:any)'] = 'afposts/getPostsSearch/$1';
-// $route['search/(:any)/page/(:any)'] = 'afposts/getPostsSearchPage/$1/$2';
-// $route['posts/author/(:any)'] = 'afposts/getPostsAuthor/$1';
-// $route['posts/author/(:any)/page/(:any)'] = 'afposts/getPostsAuthorPage/$1/$2';
-// $route['getCategory'] = 'afposts/getCategory';
-// $route['getMenuCategory'] = 'afposts/getMenuCategory';
-// $route['getCats'] = 'afposts/getCats';
-// $route['getMenuCats'] = 'afposts/getMenuCats';
-// $route['socialLinks'] = 'afposts/socialLinks';
-
-// ######################### -: Suryyas Kiran API :- #########################
-
-// $route['postsSK'] = 'afposts/getPostsSK';
-// $route['postsSK/page/(:any)'] = 'afposts/getPostsPageSK/$1';
-// $route['postsSK/category/(:any)'] = 'afposts/getPostsCategorySK/$1';
-// $route['postsSK/category/(:any)/page/(:any)'] = 'afposts/getPostsCategoryPageSK/$1/$2';
-// $route['postsSK/tag/(:any)'] = 'afposts/getPostsTagSK/$1';
-// $route['postsSK/tag/(:any)/page/(:any)'] = 'afposts/getPostsTagPageSK/$1/$2';
-// $route['searchSK/(:any)'] = 'afposts/getPostsSearchSK/$1';
-// $route['searchSK/(:any)/page/(:any)'] = 'afposts/getPostsSearchPageSK/$1/$2';
-// $route['postsSK/author/(:any)'] = 'afposts/getPostsAuthorSK/$1';
-// $route['postsSK/author/(:any)/page/(:any)'] = 'afposts/getPostsAuthorPageSK/$1/$2';
-// $route['getCategorySK'] = 'afposts/getCategorySK';
-// $route['getMenuCategorySK'] = 'afposts/getMenuCategorySK';
-// $route['getCatsSK'] = 'afposts/getCatsSK';
-// $route['getMenuCatsSK'] = 'afposts/getMenuCatsSK';
-// $route['socialLinksSK'] = 'afposts/socialLinksSK';
-
-
-######################### -: END :- #########################
-
-
-// Always First New Api Routes
-// $route['allPosts'] = 'posts/getPosts';
-// $route['allPosts/category'] = 'posts/getPostsCategory';
-// $route['allPosts/tag'] = 'posts/getPostsTag';
-// $route['allPosts/search'] = 'posts/getPostsSearch';
-// $route['allPosts/author'] = 'posts/getPostsAuthor';
-
-
-// Testing 
-// $route['test'] = 'test/getTest';
-// $route['test/category'] = 'test/getTestCategory';
-// $route['test/tag'] = 'test/getTestTag';
-// $route['test/search'] = 'test/getTestSearch';
-// $route['test/author'] = 'test/getTestAuthor';
-
+$route['login'] = 'login/login'; // Pending
+$route['register'] = 'login/register'; // Done 
+$route['forgotPassword'] = 'login/forgotPassword'; // Pending
+$route['socialLogin'] = 'login/socialLogin'; // Pending
+$route['verifyOTP'] = 'login/verifyOTP'; // Pending
+$route['getUserCategory'] = 'login/getUserCategory'; // Pending
+$route['postUserCategory'] = 'login/postUserCategory'; // Pending

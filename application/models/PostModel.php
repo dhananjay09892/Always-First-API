@@ -4,6 +4,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class PostModel extends CI_Model
 {
+    public function Ads(){
+        $result = array(
+                'image' => 'https://www.alwaysfirst.in/wp-content/uploads/2022/05/WhatsApp-Image-2022-05-07-at-7.35.15-AM.jpeg',
+                'redirect' => 'off',
+                'link' => 'https://www.alwaysfirst.in/'
+        );
+        return $result;
+    }
     public function baseUrl()
     {
         $base_url = 'http://localhost/newsify/';
@@ -24,9 +32,9 @@ class PostModel extends CI_Model
         $feature_image_thumb = implode('.', $feature_image_thumb);
         return $feature_image_thumb;
     }
-
     public function getDataFromSql($per_page, $page, $category_get, $search_get, $author_get, $tags_get)
     {
+        $ads = $this->Ads();
         $per_page = $per_page ? $per_page : 50;
         $page = $page ? $page : 1;
         $start = ($page - 1) * $per_page;
@@ -72,6 +80,7 @@ class PostModel extends CI_Model
             $post_content = preg_replace('/<br\s*\/?>/i', "\n\n", $post_content);
             // Strip HTML tags 
             $post_content = strip_tags($post_content, '<img><iframe>');
+            $post_content = strip_tags($post_content, '');
             // Ignore 61 characters from the start of the post
             if (str_contains($value['Categories_id'], '3632')) { 
             }else{
@@ -148,29 +157,29 @@ class PostModel extends CI_Model
                     'author' => $result[$newI]['author'],
                     'category' => $result[$newI]['category'],
                     'tags' => $result[$newI]['tags'],
+                    'ads'=> $ads,
                     'related_posts' => array(
-                        array(
-                            'id' => $result[$rel1]['id'],
-                            'post_data' => $result[$rel1]['post_data'],
-                            'author' => $result[$rel1]['author'],
-                            'category' => $result[$rel1]['category'],
-                            'tags' => $result[$rel1]['tags']
-                        ),
-                        array(
-                            'id' => $result[$rel2]['id'],
-                            'post_data' => $result[$rel2]['post_data'],
-                            'author' => $result[$rel2]['author'],
-                            'category' => $result[$rel2]['category'],
-                            'tags' => $result[$rel2]['tags']
-                        ),
-                    )
+                            array(
+                                'id' => $result[$rel1]['id'],
+                                'post_data' => $result[$rel1]['post_data'],
+                                'author' => $result[$rel1]['author'],
+                                'category' => $result[$rel1]['category'],
+                                'tags' => $result[$rel1]['tags']
+                            ),
+                            array(
+                                'id' => $result[$rel2]['id'],
+                                'post_data' => $result[$rel2]['post_data'],
+                                'author' => $result[$rel2]['author'],
+                                'category' => $result[$rel2]['category'],
+                                'tags' => $result[$rel2]['tags']
+                            ),
+                        )
                     );
             $final_result[] = $post_data;
             unset($post_data);
         }
         return $final_result;
     }
-    
     public function videos($per_page, $page, $category_get, $search_get, $author_get, $tags_get){
         $search_get = '[embed';
         $data = $this->getDataFromSql($per_page, $page, $category_get, $search_get, $author_get, $tags_get);

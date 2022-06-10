@@ -8,6 +8,29 @@ class Model extends CI_Model
     {
         parent::__construct();
         $this->load->library('Curl');
+    } 
+    // Advertisement API
+    public function getAds()
+    {
+        $adsArray[] = array(
+            'image' => 'https://www.alwaysfirst.in/wp-content/uploads/2022/06/Thermatic-Exhibition.jpeg',
+            'redirect' => 'off',
+            'link' => 'https://www.alwaysfirst.in/',
+        );
+        return $adsArray;
+        $none = null;
+        // return $none;
+    }
+    public function getAdsCategory()
+    {
+        $adsArray[] = array(
+            'image' => 'https://www.alwaysfirst.in/wp-content/uploads/2022/06/Thermatic-Exhibition.jpeg',
+            'redirect' => 'off',
+            'link' => 'https://www.alwaysfirst.in/',
+        );
+        return $adsArray;
+        $none = null;
+        // return $none;
     }
     // Always First API
     public function getPostsAll($per_page, $page, $category_get, $search_get, $author_get, $tags_get)
@@ -562,67 +585,34 @@ class Model extends CI_Model
         return $links;
     }
 
-    // Advertisement API
-    public function getAds()
-    {
-        $adsArray[] = array(
-            'image' => 'https://www.alwaysfirst.in/wp-content/uploads/2022/04/27-April-to-7-May.jpeg.png',
-            'redirect' => 'off',
-            'link' => 'https://www.alwaysfirst.in/',
-        );
-        $adsArray[] = array(
-            'image' => 'https://www.alwaysfirst.in/wp-content/uploads/2022/03/Gandhi-Shilp-Bazar-2.png',
-            'redirect' => 'on',
-            'link' => 'https://www.alwaysfirst.in/',
-        );
-        return $adsArray;
-        $none = null;
-        // return $none;
-    }
-    public function getAdsCategory()
-    {
-        $adsArray[] = array(
-            'image' => 'https://www.alwaysfirst.in/wp-content/uploads/2022/04/27-April-to-7-May.jpeg.png',
-            'redirect' => 'off',
-            'link' => 'https://www.alwaysfirst.in/',
-        );
-        $adsArray[] = array(
-            'image' => 'https://www.alwaysfirst.in/wp-content/uploads/2022/03/Gandhi-Shilp-Bazar-2.png',
-            'redirect' => 'on',
-            'link' => 'https://www.alwaysfirst.in/',
-        );
-        return $adsArray;
-        $none = null;
-        // return $none;
-    }
-    public function getAdsArticle()
-    {
-        $adsArray[] = array(
-            'image' => 'https://www.alwaysfirst.in/wp-content/uploads/2022/04/27-April-to-7-May.jpeg.png',
-            'redirect' => 'on',
-            'link' => 'https://www.alwaysfirst.in/',
-        );
-        $adsArray[] = array(
-            'image' => 'https://www.alwaysfirst.in/wp-content/uploads/2022/03/Gandhi-Shilp-Bazar-2.png',
-            'redirect' => 'off',
-            'link' => 'https://www.alwaysfirst.in/',
-        );
-        return $adsArray;
-        $none = null;
-        // return $none;
-    }
-    public function getScriptAds()
-    {
-        $adsArray[] = array(
-            'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>',
-        );
-        $adsArray[] = array(
-            'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>',
-        );
-        return $adsArray;
-        $none = null;
-        // return $none;
-    }
+    // public function getAdsArticle()
+        // {
+        //     $adsArray[] = array(
+        //         'image' => 'https://www.alwaysfirst.in/wp-content/uploads/2022/04/27-April-to-7-May.jpeg.png',
+        //         'redirect' => 'on',
+        //         'link' => 'https://www.alwaysfirst.in/',
+        //     );
+        //     $adsArray[] = array(
+        //         'image' => 'https://www.alwaysfirst.in/wp-content/uploads/2022/03/Gandhi-Shilp-Bazar-2.png',
+        //         'redirect' => 'off',
+        //         'link' => 'https://www.alwaysfirst.in/',
+        //     );
+        //     return $adsArray;
+        //     $none = null;
+        //     // return $none;
+        // }
+        // public function getScriptAds()
+        // {
+        //     $adsArray[] = array(
+        //         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>',
+        //     );
+        //     $adsArray[] = array(
+        //         'script' => '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>',
+        //     );
+        //     return $adsArray;
+        //     $none = null;
+        //     // return $none;
+        // }
     public function feedback($data)
     {
         $this->db->insert('feedback', $data);
