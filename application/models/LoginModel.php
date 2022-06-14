@@ -11,27 +11,32 @@ class LoginModel extends CI_Model
     }
     public function login($email, $password)
     {
-        // // get user data from database
-        // $this->db->where('username', $email);
-        // $query = $this->db->get('users');
-        // $user = $query->row();
-        // if ($user) {
-        //     // check if password is correct
-        //     $hash = $user->password;
-        //     if (password_verify($password, $hash)) {
-        //         // user is found
-        //         $user->password = null;
-        //         return $user;
-        //     } else {
-        //         return false;
-        //     }
-        // } else {
-        //     return false;
-        // }
+        // Get user data from database
+        $user = $this->db->get_where('wp5q_users', array('user_email' => $email))->row_array();
+        if ($user) {
+            // Check if password matches
+            if (password_verify($password, $user['user_pass'])) {
+                // User logged in
+                $app_data_user = $this->db->get_where('app_data', array('email' => $email))->result_array();
+                $app_data_user = $app_data_user[count($app_data_user) - 1];
+                $result = array(
+                    'user_id' => (int)$app_data_user['user_id'],
+                    'email' => $app_data_user['email'],
+                    'name' => $user['display_name'],
+                    'category' => $app_data_user['category']
+                );
+                return $result;
+            } else {
+                // Password does not match
+                return false;
+            }
+        } else {
+            // User not found
+            return false;
+        }
     }
     public function register($post_data)
     {
-        // `user_login`, `user_pass`, `user_nicename`, `user_email`, `user_url`, `user_registered`, `user_activation_key`, `user_status`, `display_name
         $data = array(
             'user_login' => $post_data['email'],
             'user_pass' => password_hash($post_data['password'], PASSWORD_DEFAULT),
@@ -94,13 +99,19 @@ class LoginModel extends CI_Model
             $this->db->insert('wp5q_usermeta', $metaData);
             $device_id = isset($post_data['device_id'])?$post_data['device_id']:'0';
             $device_token = isset($post_data['device_token'])?$post_data['device_token']:'0';
+            $login_type = isset($post_data['login_type'])?$post_data['login_type']:'';
             $app_data = array(
+                'user_id' => $user_id,
                 'email' => $post_data['email'],
                 'name' => $post_data['name'],
                 'password' => password_hash($post_data['password'], PASSWORD_DEFAULT),
                 'old_password' => NULL,
                 'device_id' => $device_id,
-                'device_token' => $device_token
+                'device_token' => $device_token,
+                'category' => NULL,
+                'login_type' => $login_type,
+                'OTP' => NULL,
+                'Created_at' => date('Y-m-d H:i:s'),
             );
             $this->db->insert('app_data', $app_data);
             return $data;
@@ -117,6 +128,72 @@ class LoginModel extends CI_Model
             return true;
         } else {
             // return array('status' => 404, 'message' => 'User not found.', 'data' => $user);
+            return false;
+        }
+    }
+    public function socialLogin($data)
+    {
+        $email = $data['email'];
+        $user = $this->db->get_where('app_data', array('email' => $email))->result_array();
+        if ($user) {
+            $user = $user[count($user) - 1];
+            // if($user['login_type'] == 'facebook' || $user['login_type'] == 'google'){
+                $result = array(
+                    'user_id' => (int)$user['user_id'],
+                    'email' => $user['email'],
+                    'name' => $user['name'],
+                    'category' => $user['category']
+                );
+                // return array('status' => 200, 'message' => 'User already exists.', 'data' => $user);
+                return $result;
+            // }else {
+            //     return false;
+            // }
+        } else {
+            // return array('status' => 404, 'message' => 'User not found.', 'data' => $user);
+            return false;
+        }
+    }
+    public function getUserCategory($user_id){
+        $this->db->where('user_id', $user_id);
+        $query = $this->db->get('app_data');
+        $user = $query->row();
+        $c = $user->category;
+        // $category = explode(',', $c);
+        return array('category' => $c);        
+    }
+    public function postUserCategory($user_id, $category){
+        // $category = implode(',', $category);
+        $this->db->where('user_id', $user_id);
+        $this->db->update('app_data', array('category' => $category));
+        return true;
+    }
+    public function forgotPassword($email){
+        $user = $this->db->get_where('app_data', array('email' => $email))->result_array();
+        if ($user) {
+            $user = $user[count($user) - 1];
+            $OTP = rand(100000, 999999);
+            $this->db->where('user_id', $user['user_id']);
+            $this->db->update('app_data', array('OTP' => $OTP));
+            if($this->sendOTP($email, $OTP)){
+                return true;
+            }else{
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    public function sendOTP($email, $OTP){
+        $this->load->library('email');
+        $this->load->config('email');
+        $this->email->from($this->config->item('smtp_user'), 'Admin');
+        $this->email->to($email);
+        $this->email->subject('OTP');
+        $this->email->message('Your OTP is '.$OTP);
+        if($this->email->send()){
+            return true;
+        }else{
             return false;
         }
     }

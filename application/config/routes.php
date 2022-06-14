@@ -39,10 +39,19 @@ $route['marketAPI']= 'test/marketAPI';
 
 // login API
 
-$route['login'] = 'login/login'; // Pending
+$route['login'] = 'login/login'; // Done
+// post Data = array('email'=>'','password'=>'');
+
 $route['register'] = 'login/register'; // Done 
+// post Data = array('name'=>,'email'=>'','password'=>'','device_id'=>'','device_token'=>'');
+
+$route['socialLogin'] = 'login/socialLogin'; // Done
+// post Data = array('name'=>,'email'=>'','device_id'=>'','device_token'=>'','login_type'=>'');
+
+$route['getUserCategory'] = 'login/getUserCategory'; // Done
+// post Data = array('user_id'=>'');
+$route['postUserCategory'] = 'login/postUserCategory'; // Done
+// post Data = array('user_id'=>'','category'=>'');
+
 $route['forgotPassword'] = 'login/forgotPassword'; // Pending
-$route['socialLogin'] = 'login/socialLogin'; // Pending
 $route['verifyOTP'] = 'login/verifyOTP'; // Pending
-$route['getUserCategory'] = 'login/getUserCategory'; // Pending
-$route['postUserCategory'] = 'login/postUserCategory'; // Pending

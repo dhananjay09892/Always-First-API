@@ -47,7 +47,10 @@ class Login extends CI_Controller
                 $data = array(
                     'name' => $post_data['name'],
                     'email' => $post_data['email'],
-                    'password' => $post_data['password']
+                    'password' => $post_data['password'],
+                    'device_id' => isset($post_data['device_id']) ? $post_data['device_id'] : '',
+                    'device_token' => isset($post_data['device_token']) ? $post_data['device_token'] : '',
+                    'login_type' => isset($post_data['login_type']) ? $post_data['login_type'] : 'email',
                 );
                 $checkUserdata = $this->LoginModel->checkUserdata($data);
                 if ($checkUserdata) {
@@ -56,7 +59,9 @@ class Login extends CI_Controller
                     $result = $this->LoginModel->register($data);
                     $r_data = array(
                         'user_id' => $result['user_id'],
-                        'email' => $result['user_email']
+                        'email' => $result['user_email'],
+                        'name' => $result['display_name'],
+                        'category' => $result['category']
                     );
                     $json = array('status' => 201, 'message' => 'User registered successfully.', 'data' => $r_data);
                 }
@@ -81,7 +86,7 @@ class Login extends CI_Controller
                     $json = array('status' => 401, 'message' => 'Invalid email.');
                 }
             } else {
-                $json = array('status' => 400, 'message' => 'Bad request.');
+                $json = array('status' => 400, 'message' => 'Parameter missing.');
             }
         }
         echo json_encode($json, JSON_UNESCAPED_UNICODE);
@@ -92,23 +97,32 @@ class Login extends CI_Controller
         if ($method != 'POST') {
             $json = array('status' => 405, 'message' => 'Method Not Allowed.');
         } else {
-            if (isset($post_data['email']) && isset($post_data['name']) && isset($post_data['social_id']) && isset($post_data['social_type'])) {
+            if (isset($post_data['email'])) {
+                $password = password_hash(time(), PASSWORD_DEFAULT);
                 $data = array(
-                    'email' => $post_data['email'],
                     'name' => $post_data['name'],
-                    'social_id' => $post_data['social_id'],
-                    'social_type' => $post_data['social_type']
+                    'email' => $post_data['email'],
+                    'password' => $password,
+                    'device_id' => isset($post_data['device_id']) ? $post_data['device_id'] : '',
+                    'device_token' => isset($post_data['device_token']) ? $post_data['device_token'] : '',
+                    'login_type' => isset($post_data['login_type']) ? $post_data['login_type'] : 'email',
                 );
                 $checkUserdata = $this->LoginModel->checkUserdata($data);
                 if ($checkUserdata) {
-                    $json = array('status' => 200, 'message' => 'Login Successful.', 'data' => $checkUserdata);
-                } else {
-                    $result = $this->LoginModel->register($data);
-                    $r_data = array(
-                        'user_id' => $result['user_id'],
-                        'email' => $result['user_email']
-                    );
-                    $json = array('status' => 201, 'message' => 'User registered successfully.', 'data' => $r_data);
+                    $result = $this->LoginModel->socialLogin($data);
+                    if($result){
+                        $json = array('status' => 200, 'message' => 'Login Successful.', 'data' => $result);
+                    }else{
+                        $json = array('status' => 401, 'message' => 'Invalid Credentials.');
+                    }
+                } else{
+                    if (isset($post_data['email']) && isset($post_data['name']) && isset($post_data['login_type'])){
+                        $addData = $this->LoginModel->register($data);
+                        $result = $this->LoginModel->socialLogin($data);
+                        $json = array('status' => 201, 'message' => 'Login Successful.', 'data' => $result);
+                    } else {
+                        $json = array('status' => 400, 'message' => 'Parameter missing.');
+                    }
                 }
             } else {
                 $json = array('status' => 400, 'message' => 'Parameter missing.');
@@ -152,7 +166,7 @@ class Login extends CI_Controller
                     $json = array('status' => 401, 'message' => 'No category found.' , 'data' => NULL);
                 }
             } else {
-                $json = array('status' => 400, 'message' => 'Bad request.');
+                $json = array('status' => 400, 'message' => 'parameter missing.');
             }
         }
         echo json_encode($json, JSON_UNESCAPED_UNICODE);
@@ -165,8 +179,8 @@ class Login extends CI_Controller
         } else {
             if (isset($post_data['user_id']) && isset($post_data['category'])) {
                 $user_id = $post_data['user_id'];
-                $category_id = explode(',', $post_data['category']);
-                $result = $this->LoginModel->postUserCategory($user_id, $category_id);
+                $category = $post_data['category'];
+                $result = $this->LoginModel->postUserCategory($user_id, $category);
                 if ($result) {
                     $json = array('status' => 200, 'message' => 'User category added successfully.');
                 } else {
