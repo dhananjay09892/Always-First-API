@@ -172,7 +172,7 @@ class LoginModel extends CI_Model
         $user = $this->db->get_where('app_data', array('email' => $email))->result_array();
         if ($user) {
             $user = $user[count($user) - 1];
-            $OTP = rand(100000, 999999);
+            $OTP = rand(1000, 9999);
             $this->db->where('user_id', $user['user_id']);
             $this->db->update('app_data', array('OTP' => $OTP));
             if($this->sendOTP($email, $OTP)){
@@ -194,6 +194,37 @@ class LoginModel extends CI_Model
         if($this->email->send()){
             return true;
         }else{
+            return false;
+        }
+    }
+    public function verifyOTP($user_id, $OTP){
+        $user = $this->db->get_where('app_data', array('user_id' => $user_id))->result_array();
+        if ($user) {
+            $user = $user[count($user) - 1];
+            if($user['OTP'] == $OTP){
+                return true;
+            }else{
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    public function resetPassword($user_id, $password){
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $user = $this->db->get_where('app_data', array('user_id' => $user_id))->result_array();
+        if ($user) {
+            $wp_user = $this->db->get_where('wp5q_users', array('ID' => $user_id))->result_array();
+            if($wp_user){
+                $wp_user = $wp_user[count($wp_user) - 1];
+                $this->db->where('ID', $wp_user['ID']);
+                $this->db->update('wp5q_users', array('user_pass' => $hashed_password));
+            }
+            $user = $user[count($user) - 1];
+            $this->db->where('user_id', $user['user_id']);
+            $this->db->update('app_data', array('password' => $hashed_password, 'old_password' => $user['password']));
+            return true;
+        } else {
             return false;
         }
     }

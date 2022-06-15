@@ -81,7 +81,7 @@ class Login extends CI_Controller
                 $email = $post_data['email'];
                 $result = $this->LoginModel->forgotPassword($email);
                 if ($result) {
-                    $json = array('status' => 200, 'message' => 'Password reset link sent to your email.');
+                    $json = array('status' => 200, 'message' => 'OTP sent to your email.');
                 } else {
                     $json = array('status' => 401, 'message' => 'Invalid email.');
                 }
@@ -136,10 +136,10 @@ class Login extends CI_Controller
         if ($method != 'POST') {
             $json = array('status' => 405, 'message' => 'Method Not Allowed.');
         } else {
-            if (isset($post_data['email']) && isset($post_data['otp'])) {
-                $email = $post_data['email'];
+            if (isset($post_data['user_id']) && isset($post_data['otp'])) {
+                $user_id = $post_data['user_id'];
                 $otp = $post_data['otp'];
-                $result = $this->LoginModel->verifyOTP($email, $otp);
+                $result = $this->LoginModel->verifyOTP($user_id, $otp);
                 if ($result) {
                     $json = array('status' => 200, 'message' => 'OTP verified successfully.');
                 } else {
@@ -185,6 +185,27 @@ class Login extends CI_Controller
                     $json = array('status' => 200, 'message' => 'User category added successfully.');
                 } else {
                     $json = array('status' => 401, 'message' => 'User category not added.');
+                }
+            } else {
+                $json = array('status' => 400, 'message' => 'Bad request.');
+            }
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
+    public function resetPassword(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 405, 'message' => 'Method Not Allowed.');
+        } else {
+            if (isset($post_data['user_id']) && isset($post_data['password'])) {
+                $user_id = $post_data['user_id'];
+                $password = $post_data['password'];
+                $result = $this->LoginModel->resetPassword($user_id, $password);
+                if ($result) {
+                    $json = array('status' => 200, 'message' => 'Password reset successfully.');
+                } else {
+                    $json = array('status' => 401, 'message' => 'Invalid email.');
                 }
             } else {
                 $json = array('status' => 400, 'message' => 'Bad request.');

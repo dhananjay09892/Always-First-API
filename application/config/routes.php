@@ -41,17 +41,17 @@ $route['marketAPI']= 'test/marketAPI';
 
 $route['login'] = 'login/login'; // Done
 // post Data = array('email'=>'','password'=>'');
-
 $route['register'] = 'login/register'; // Done 
 // post Data = array('name'=>,'email'=>'','password'=>'','device_id'=>'','device_token'=>'');
-
 $route['socialLogin'] = 'login/socialLogin'; // Done
 // post Data = array('name'=>,'email'=>'','device_id'=>'','device_token'=>'','login_type'=>'');
-
 $route['getUserCategory'] = 'login/getUserCategory'; // Done
 // post Data = array('user_id'=>'');
 $route['postUserCategory'] = 'login/postUserCategory'; // Done
 // post Data = array('user_id'=>'','category'=>'');
-
-$route['forgotPassword'] = 'login/forgotPassword'; // Pending
-$route['verifyOTP'] = 'login/verifyOTP'; // Pending
+$route['forgotPassword'] = 'login/forgotPassword'; // Done 
+// post Data = array('email'=>'');
+$route['verifyOTP'] = 'login/verifyOTP'; // Done
+// post Data = array('user_id'=>'','otp'=>'');
+$route['resetPassword'] = 'login/resetPassword'; // Done
+// post Data = array('user_id'=>'','password'=>'');
