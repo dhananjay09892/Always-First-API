@@ -81,7 +81,7 @@ class Login extends CI_Controller
                 $email = $post_data['email'];
                 $result = $this->LoginModel->forgotPassword($email);
                 if ($result) {
-                    $json = array('status' => 200, 'message' => 'OTP sent to your email.');
+                    $json = array('status' => 200, 'message' => 'OTP sent to your email.', 'data' => $result);
                 } else {
                     $json = array('status' => 401, 'message' => 'Invalid email.');
                 }
@@ -141,7 +141,7 @@ class Login extends CI_Controller
                 $otp = $post_data['otp'];
                 $result = $this->LoginModel->verifyOTP($user_id, $otp);
                 if ($result) {
-                    $json = array('status' => 200, 'message' => 'OTP verified successfully.');
+                    $json = array('status' => 200, 'message' => 'OTP verified successfully.', 'data' => $result);
                 } else {
                     $json = array('status' => 401, 'message' => 'Invalid OTP.');
                 }
@@ -160,6 +160,26 @@ class Login extends CI_Controller
             if (isset($post_data['user_id'])) {
                 $user_id = $post_data['user_id'];
                 $result = $this->LoginModel->getUserCategory($user_id);
+                if ($result) {
+                    $json = array('status' => 200, 'message' => 'User category list.', 'data' => $result);
+                } else {
+                    $json = array('status' => 401, 'message' => 'No category found.' , 'data' => NULL);
+                }
+            } else {
+                $json = array('status' => 400, 'message' => 'parameter missing.');
+            }
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
+    public function getUserCategoryNew(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 405, 'message' => 'Method Not Allowed.');
+        } else {
+            if (isset($post_data['user_id'])) {
+                $user_id = $post_data['user_id'];
+                $result = $this->LoginModel->getUserCategoryNew($user_id);
                 if ($result) {
                     $json = array('status' => 200, 'message' => 'User category list.', 'data' => $result);
                 } else {

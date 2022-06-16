@@ -159,8 +159,35 @@ class LoginModel extends CI_Model
         $query = $this->db->get('app_data');
         $user = $query->row();
         $c = $user->category;
-        // $category = explode(',', $c);
-        return array('category' => $c);        
+        $category = explode(',', $c);
+        return array('category' => $c);
+    }
+    public function getUserCategoryNew($user_id)
+    {
+        $this->db->where('user_id', $user_id);
+        $query = $this->db->get('app_data');
+        $user = $query->row();
+        $c = $user->category;
+        if($c!=NULL){
+            $category = explode(',', $c);
+            foreach ($category as $cat) {
+                $catN = $this->db->get_where('wp5q_terms', array('term_id' => $cat))->row();
+                $catX['name'] = $catN->name;
+                $catX['id'] = $cat;
+                $result[] = $catX;
+            }
+            return $result;
+        }else{
+            $cNew = "65,35,36,8248,8096,131,12849,3490,92,27,8403,2639,16,3632";
+            $category = explode(',', $cNew);
+            foreach ($category as $cat) {
+                $catN = $this->db->get_where('wp5q_terms', array('term_id' => $cat))->row();
+                $catX['name'] = $catN->name;
+                $catX['id'] = $cat;
+                $result[] = $catX;
+            }
+            return $result;
+        }
     }
     public function postUserCategory($user_id, $category){
         // $category = implode(',', $category);
@@ -173,10 +200,14 @@ class LoginModel extends CI_Model
         if ($user) {
             $user = $user[count($user) - 1];
             $OTP = rand(1000, 9999);
-            $this->db->where('user_id', $user['user_id']);
+            $user_id = $user['user_id'];
+            $this->db->where('user_id', $user_id);
             $this->db->update('app_data', array('OTP' => $OTP));
+            $result = array(
+                'user_id '=> $user_id
+            );
             if($this->sendOTP($email, $OTP)){
-                return true;
+                return $result;
             }else{
                 return false;
             }
@@ -201,8 +232,13 @@ class LoginModel extends CI_Model
         $user = $this->db->get_where('app_data', array('user_id' => $user_id))->result_array();
         if ($user) {
             $user = $user[count($user) - 1];
-            if($user['OTP'] == $OTP){
-                return true;
+            $user_id = $user['user_id'];
+            $user_otp = $user['OTP'];
+            $result = array(
+                'user_id' => $user_id
+            );
+            if($user_otp == $OTP){
+                return $result;
             }else{
                 return false;
             }
