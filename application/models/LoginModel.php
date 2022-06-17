@@ -4,13 +4,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class LoginModel extends CI_Model
 {
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
         $this->load->library('Curl');
     }
-    public function login($email, $password)
-    {
+    public function login($email, $password){
         // Get user data from database
         $user = $this->db->get_where('wp5q_users', array('user_email' => $email))->row_array();
         if ($user) {
@@ -35,8 +33,7 @@ class LoginModel extends CI_Model
             return false;
         }
     }
-    public function register($post_data)
-    {
+    public function register($post_data){
         $data = array(
             'user_login' => $post_data['email'],
             'user_pass' => password_hash($post_data['password'], PASSWORD_DEFAULT),
@@ -118,8 +115,7 @@ class LoginModel extends CI_Model
         }
         return false;
     }
-    public function checkUserdata($data)
-    {
+    public function checkUserdata($data){
         $this->db->where('user_email', $data['email']);
         $query = $this->db->get('wp5q_users');
         $user = $query->row();
@@ -131,8 +127,7 @@ class LoginModel extends CI_Model
             return false;
         }
     }
-    public function socialLogin($data)
-    {
+    public function socialLogin($data){
         $email = $data['email'];
         $user = $this->db->get_where('app_data', array('email' => $email))->result_array();
         if ($user) {
@@ -160,10 +155,9 @@ class LoginModel extends CI_Model
         $user = $query->row();
         $c = $user->category;
         $category = explode(',', $c);
-        return array('category' => $c);
+        return $category;
     }
-    public function getUserCategoryNew($user_id)
-    {
+    public function getUserCategoryNew($user_id){
         $this->db->where('user_id', $user_id);
         $query = $this->db->get('app_data');
         $user = $query->row();
@@ -204,7 +198,7 @@ class LoginModel extends CI_Model
             $this->db->where('user_id', $user_id);
             $this->db->update('app_data', array('OTP' => $OTP));
             $result = array(
-                'user_id '=> $user_id
+                'user_id'=> $user_id
             );
             if($this->sendOTP($email, $OTP)){
                 return $result;
@@ -260,6 +254,21 @@ class LoginModel extends CI_Model
             $this->db->where('user_id', $user['user_id']);
             $this->db->update('app_data', array('password' => $hashed_password, 'old_password' => $user['password']));
             return true;
+        } else {
+            return false;
+        }
+    }
+    public function getOTP($user_id){
+        $user = $this->db->get_where('app_data', array('user_id' => $user_id))->result_array();
+        if ($user) {
+            $user = $user[count($user) - 1];
+            $user_id = $user['user_id'];
+            $user_otp = $user['OTP'];
+            $result = array(
+                'user_id' => $user_id,
+                'OTP' => $user_otp
+            );
+            return $result;
         } else {
             return false;
         }

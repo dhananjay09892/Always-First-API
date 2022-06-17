@@ -233,4 +233,24 @@ class Login extends CI_Controller
         }
         echo json_encode($json, JSON_UNESCAPED_UNICODE);
     }
+    public function getOTP(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 405, 'message' => 'Method Not Allowed.');
+        } else {
+            if(isset($post_data['user_id'])){
+                $user_id = $post_data['user_id'];
+                $result = $this->LoginModel->getOTP($user_id);
+                if($result){
+                    $json = array('status' => 200, 'message' => 'Success', 'data' => $result);
+                }else{
+                    $json = array('status' => 401, 'message' => 'Invalid user id.');
+                }
+            }else{
+                $json = array('status' => 400, 'message' => 'Parameter missing.');
+            }
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
 }

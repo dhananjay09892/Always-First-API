@@ -56,3 +56,6 @@ $route['verifyOTP'] = 'login/verifyOTP'; // Done
 $route['resetPassword'] = 'login/resetPassword'; // Done
 // post Data = array('user_id'=>'','password'=>'');
 $route['getUserCategoryNew'] = 'login/getUserCategoryNew'; // Done
+// post Data = array('user_id'=>'');
+$route['getOTP'] = 'login/getOTP'; // Done
+// post Data = array('user_id'=>'');
