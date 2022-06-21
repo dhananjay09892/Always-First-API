@@ -195,32 +195,32 @@ class Model extends CI_Model
         $links[] = array(
             'name' => 'Facebook',
             'link' => 'https://www.facebook.com/officialalwaysfirst/',
-            'icon' => 'fa fa-facebook'
+            'icon' => 'https://alwaysfirst.in/api/icons/Facebook.png'
         );
         $links[] = array(
             'name' => 'Twitter',
             'link' => 'https://twitter.com/alwaysFTweets',
-            'icon' => 'fa fa-twitter'
+            'icon' => 'https://alwaysfirst.in/api/icons/Twitter.png'
         );
         $links[] = array(
             'name' => 'Instagram',
             'link' => 'https://www.instagram.com/officialalwaysfirst/',
-            'icon' => 'fa fa-instagram'
+            'icon' => 'https://alwaysfirst.in/api/icons/Instagram.png'
         );
         $links[] = array(
             'name' => 'Youtube',
             'link' => 'https://www.youtube.com/channel/UCgnOc1a4uPHuityfGou3tLg',
-            'icon' => 'fa fa-youtube'
+            'icon' => 'https://alwaysfirst.in/api/icons/Youtube.png'
         );
         $links[] = array(
-            'name' => 'pinterest',
+            'name' => 'Pinterest',
             'link' => 'https://pinterest.com/alwaysfirst501',
-            'icon' => 'fa fa-pinterest'
+            'icon' => 'https://alwaysfirst.in/api/icons/Pintrest.png'
         );
         $links[] = array(
             'name' => 'linkedin',
             'link' => 'https://www.linkedin.com/company/always-first/',
-            'icon' => 'fa fa-linkedin'
+            'icon' => 'https://alwaysfirst.in/api/icons/linkedin.png'
         );
         return $links;
     }

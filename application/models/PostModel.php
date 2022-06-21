@@ -93,6 +93,10 @@ class PostModel extends CI_Model
             $post_content = trim($post_content);
             // Remove brackets from the post content
             $post_content = preg_replace('/\([^)]*\)/', '', $post_content);
+            // remove \r\n from the post content
+            $post_content = str_replace("\r\n", "", $post_content);
+            // remove &nbsp; from the post content
+            $post_content = str_replace("&nbsp;", "", $post_content);
 
             $feature_image = $value['feature_image'];
             // Feature thumbnail image

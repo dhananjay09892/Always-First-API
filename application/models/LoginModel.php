@@ -172,7 +172,7 @@ class LoginModel extends CI_Model
             }
             return $result;
         }else{
-            $cNew = "65,35,36,8248,8096,131,12849,3490,92,27,8403,2639,16,3632";
+            $cNew = "154,114,43,94,166,101,80";
             $category = explode(',', $cNew);
             foreach ($category as $cat) {
                 $catN = $this->db->get_where('wp5q_terms', array('term_id' => $cat))->row();
