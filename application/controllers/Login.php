@@ -253,4 +253,46 @@ class Login extends CI_Controller
         }
         echo json_encode($json, JSON_UNESCAPED_UNICODE);
     }
+    public function getProfile(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 405, 'message' => 'Method Not Allowed.');
+        } else {
+            if(isset($post_data['user_id'])){
+                $user_id = $post_data['user_id'];
+                $result = $this->LoginModel->getProfile($user_id);
+                if($result){
+                    $json = array('status' => 200, 'message' => 'Success', 'data' => $result);
+                }else{
+                    $json = array('status' => 401, 'message' => 'Invalid user id.');
+                }
+            }else{
+                $json = array('status' => 400, 'message' => 'Parameter missing.');
+            }
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
+    public function updateProfile(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 405, 'message' => 'Method Not Allowed.');
+        } else {
+            if(isset($post_data['user_id'])){
+                $user_id = $post_data['user_id'];
+                $name = isset($post_data['name']) ? $post_data['name'] : NULL;
+                $email = isset($post_data['email']) ? $post_data['email'] : NULL;
+                $result = $this->LoginModel->updateProfile($user_id, $name, $email);
+                if($result){
+                    $json = array('status' => 200, 'message' => 'Success');
+                }else{
+                    $json = array('status' => 401, 'message' => 'Invalid user id.');
+                }
+            }else{
+                $json = array('status' => 400, 'message' => 'Parameter missing.');
+            }
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
 }

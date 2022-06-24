@@ -59,3 +59,8 @@ $route['getUserCategoryNew'] = 'login/getUserCategoryNew'; // Done
 // post Data = array('user_id'=>'');
 $route['getOTP'] = 'login/getOTP'; // Done
 // post Data = array('user_id'=>'');
+
+$route['getProfile'] = 'login/getProfile'; // Done
+// post Data = array('user_id'=>'');
+$route['updateProfile'] = 'login/updateProfile'; // Done
+// post Data = array('user_id'=>'','name'=>'','email'=>'');

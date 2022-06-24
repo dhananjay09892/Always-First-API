@@ -232,6 +232,9 @@ class LoginModel extends CI_Model
                 'user_id' => $user_id
             );
             if($user_otp == $OTP){
+                // replace otp with null
+                $this->db->where('user_id', $user_id);
+                $this->db->update('app_data', array('OTP' => NULL));
                 return $result;
             }else{
                 return false;
@@ -272,5 +275,30 @@ class LoginModel extends CI_Model
         } else {
             return false;
         }
+    }
+    public function getProfile($user_id){
+        $user = $this->db->get_where('app_data', array('user_id' => $user_id))->result_array();
+        if(count($user) >= 1 ){
+            $user = $user[count($user) - 1];
+            $result = array(
+                'user_id' => $user['user_id'],
+                'email' => $user['email'],
+                'name' => $user['name']
+            );
+            return $result;
+        }else {
+            return false;
+        }
+    }
+    public function updateProfile($user_id, $name, $email){
+        if($name != NULL){
+            $this->db->where('user_id', $user_id);
+            $this->db->update('app_data', array('name' => $name));
+        }
+        if($email != NULL){
+            $this->db->where('user_id', $user_id);
+            $this->db->update('app_data', array('email' => $email));
+        }
+        return true;
     }
 }
