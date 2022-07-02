@@ -200,6 +200,7 @@ class PostModel extends CI_Model
             $url = $matches[1];
             // $url = str_replace('https://youtu.be/', 'https://www.youtube.com/embed/', $url);
             $url = str_replace('https://youtu.be/', '', $url);
+            $url = str_replace('http://youtu.be/', '', $url);
             $url = str_replace('https://www.youtube.com/watch?v=', '', $url);
             $url_embed = 'https://youtu.be/'.$url;
             $url_embed2 = 'https://www.youtube.com/embed/'.$url;

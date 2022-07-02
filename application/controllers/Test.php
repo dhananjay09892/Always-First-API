@@ -299,6 +299,33 @@ class Test extends CI_Controller{
         echo json_encode($json, JSON_UNESCAPED_UNICODE);
         // echo json_encode($json);
     }
+    public function getCategorySetting(){
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'GET') {
+            $json = array("status" => 400, "message" => "Bad request");
+        } else {
+            $json = $this->Model->getCategorySetting();
+            $json = array("status" => 200, "message" => "success", "body" => $json);
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+        // echo json_encode($json);
+    }
+    public function getUserCategorySetting(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array("status" => 400, "message" => "Bad request");
+        } else {
+            if(isset($post_data['user_id'])){
+                $user_id = $post_data['user_id'];
+                $json = $this->Model->getUserCategorySetting($user_id);
+                $json = array("status" => 200, "message" => "success", "body" => $json);
+            }else{
+                $json = array("status" => 400, "message" => "Bad request");
+            }
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
     // public function test(){
     //     $post_data = $this->input->post();
     //     $method = $_SERVER['REQUEST_METHOD'];

@@ -111,6 +111,8 @@ class LoginModel extends CI_Model
                 'Created_at' => date('Y-m-d H:i:s'),
             );
             $this->db->insert('app_data', $app_data);
+            $this->forgotPassword($post_data['email']);
+            $data['message'] = 'OTP has been sent to your email';
             return $data;
         }
         return false;
@@ -166,7 +168,8 @@ class LoginModel extends CI_Model
             $category = explode(',', $c);
             foreach ($category as $cat) {
                 $catN = $this->db->get_where('wp5q_terms', array('term_id' => $cat))->row();
-                $catX['name'] = $catN->name;
+                $catname = $catN->name;
+                $catX['name'] = html_entity_decode($catname);
                 $catX['id'] = $cat;
                 $result[] = $catX;
             }
@@ -212,9 +215,9 @@ class LoginModel extends CI_Model
     public function sendOTP($email, $OTP){
         $this->load->library('email');
         $this->load->config('email');
-        $this->email->from($this->config->item('smtp_user'), 'Admin');
+        $this->email->from($this->config->item('smtp_user'), 'Always First Admin');
         $this->email->to($email);
-        $this->email->subject('OTP');
+        $this->email->subject('Always First OTP');
         $this->email->message('Your OTP is '.$OTP);
         if($this->email->send()){
             return true;

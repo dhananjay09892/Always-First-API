@@ -61,7 +61,8 @@ class Login extends CI_Controller
                         'user_id' => $result['user_id'],
                         'email' => $result['user_email'],
                         'name' => $result['display_name'],
-                        'category' => $result['category']
+                        'category' => $result['category'],
+                        'message' => $result['message']
                     );
                     $json = array('status' => 201, 'message' => 'User registered successfully.', 'data' => $r_data);
                 }
