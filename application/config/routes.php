@@ -13,6 +13,7 @@ $route['allPosts/category'] = 'test/getTestCategory';
 $route['allPosts/tag'] = 'test/getTestTag';
 $route['allPosts/search'] = 'test/getTestSearch';
 $route['allPosts/author'] = 'test/getTestAuthor';
+$route['bottomPosts'] = 'test/getBottomPosts';
 
 // Always Last Old Api Routes
 $route['getCategory'] = 'test/getCategory';
@@ -28,7 +29,7 @@ $route['socialLinks'] = 'test/socialLinks';
 // advertisement API
 $route['getAds'] = 'test/getAds';
 $route['getAdsCategory'] = 'test/getAdsCategory';
-// $route['getAdsArticle'] = 'test/getAdsArticle';
+$route['getAdsArticle'] = 'test/getAdsArticle';
 // $route['getScriptAds'] = 'test/getScriptAds';
 
 $route['feedback'] = 'test/feedback';

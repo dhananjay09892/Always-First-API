@@ -40,14 +40,10 @@ class PostModel extends CI_Model
         $start = ($page - 1) * $per_page;
         $end = $per_page;
         $per_page_sql = "LIMIT $start, $end";
-        // DONE: get category
-        $category_sql = $category_get ? "AND ( SELECT DISTINCT wp_terms.term_id FROM wp_terms INNER JOIN wp_term_taxonomy ON wp_terms.term_id = wp_term_taxonomy.term_id INNER JOIN wp_term_relationships wpr ON wpr.term_taxonomy_id = wp_term_taxonomy.term_taxonomy_id WHERE taxonomy = 'category' AND wp_posts.ID = wpr.object_id  AND wp_term_taxonomy.term_taxonomy_id = '$category_get') = $category_get" : '';
-        // DONE: search
-        $search_sql = $search_get ? "AND (post_title LIKE '%$search_get%' OR post_content LIKE '%$search_get%')" : '';
-        // DONE: author
-        $author_sql = $author_get ? "AND post_author = '$author_get'" : '';
-        // DONE: tags
-        $tags_sql = $tags_get ? "AND ( SELECT DISTINCT wp_terms.term_id FROM wp_terms INNER JOIN wp_term_taxonomy ON wp_terms.term_id = wp_term_taxonomy.term_id INNER JOIN wp_term_relationships wpr ON wpr.term_taxonomy_id = wp_term_taxonomy.term_taxonomy_id WHERE taxonomy = 'post_tag' AND wp_posts.ID = wpr.object_id  AND wp_term_taxonomy.term_taxonomy_id = '$tags_get') = $tags_get" : '';
+        $category_sql = $category_get ? "AND ( SELECT DISTINCT wp_terms.term_id FROM wp_terms INNER JOIN wp_term_taxonomy ON wp_terms.term_id = wp_term_taxonomy.term_id INNER JOIN wp_term_relationships wpr ON wpr.term_taxonomy_id = wp_term_taxonomy.term_taxonomy_id WHERE taxonomy = 'category' AND wp_posts.ID = wpr.object_id  AND wp_term_taxonomy.term_taxonomy_id = '$category_get') = $category_get" : ''; // DONE: get category
+        $search_sql = $search_get ? "AND (post_title LIKE '%$search_get%' OR post_content LIKE '%$search_get%')" : ''; // DONE: search
+        $author_sql = $author_get ? "AND post_author = '$author_get'" : ''; // DONE: author
+        $tags_sql = $tags_get ? "AND ( SELECT DISTINCT wp_terms.term_id FROM wp_terms INNER JOIN wp_term_taxonomy ON wp_terms.term_id = wp_term_taxonomy.term_id INNER JOIN wp_term_relationships wpr ON wpr.term_taxonomy_id = wp_term_taxonomy.term_taxonomy_id WHERE taxonomy = 'post_tag' AND wp_posts.ID = wpr.object_id  AND wp_term_taxonomy.term_taxonomy_id = '$tags_get') = $tags_get" : ''; // DONE: tags
         // Wordpress query
         $query = $this->db->query("SELECT DISTINCT id,
                             post_title,post_content,post_modified,
@@ -183,6 +179,27 @@ class PostModel extends CI_Model
             unset($post_data);
         }
         return $final_result;
+    }
+    public function getBottomPosts(){
+        $headCat = array(
+            'Art & Culture'=>'35',
+            'Featured Stories' => '3490'
+        );
+        foreach($headCat as $key => $value){
+            $category = $value;
+            $per_page = 50;
+            $page = 1;
+            // $category = $post_data['category'] ? $post_data['category'] : '';
+            $search = '';
+            $author = '';
+            $tags = '';
+            $result[] = array(
+                'name' => $key,
+                'cat_id' => $category,
+                'posts' => $this->getDataFromSql($per_page, $page, $category, $search, $author, $tags)
+            );
+        }
+        return $result;
     }
     public function videos($per_page, $page, $category_get, $search_get, $author_get, $tags_get){
         $search_get = '[embed';

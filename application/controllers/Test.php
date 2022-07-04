@@ -113,6 +113,23 @@ class Test extends CI_Controller{
         }
         echo json_encode($json, JSON_UNESCAPED_UNICODE);
     }
+    public function getBottomPosts(){
+        $method = $_SERVER['REQUEST_METHOD'];
+        $post_data = $this->input->post();
+        if ($method != 'POST') {
+            $json = array('status' => 400, 'message' => 'Bad request.');
+        } else {
+            // $per_page = $post_data['per_page'] ? $post_data['per_page'] : 50;
+            // $page = $post_data['page'] ? $post_data['page'] : 1;
+            // $category = $post_data['category'] ? $post_data['category'] : '';
+            // $search = $post_data['search'] ? $post_data['search'] : '';
+            // $author = $post_data['author'] ? $post_data['author'] : '';
+            // $tags = $post_data['tags'] ? $post_data['tags'] : '';
+            $json = $this->PostModel->getBottomPosts();
+            $json = array("status" => 200, "message" => "success", "body" => $json);
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
     public function getCategory(){
         $method = $_SERVER['REQUEST_METHOD'];
         if ($method != 'GET') {
@@ -200,7 +217,7 @@ class Test extends CI_Controller{
         if ($method != 'GET') {
             $json = array("status" => 400, "message" => "Bad request");
         } else {
-            $json = $this->Model->getAdsArticle();
+            $json = $this->PostModel->Ads();
             $json = array("status" => 200, "message" => "success", "body" => $json);
         }
         echo json_encode($json, JSON_UNESCAPED_UNICODE);

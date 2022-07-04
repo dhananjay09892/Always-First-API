@@ -654,28 +654,29 @@ class Model extends CI_Model
                 'id' => (int)$value['cat_id'],
                 'name' => $value['name'],
                 'icon' => $value['icon_link'],
+                'color' => $value['color'],
             );
         }
         return $result;
         // $json = '[
-        //             {"id": 35,"name": "Art & Culture","icon": "https://alwaysfirst.in/api/icons/35.png"},
-        //             {"id": 162,"name": "Bollywood","icon": "https://alwaysfirst.in/api/icons/162.png"},
-        //             {"id": 36,"name": "Business","icon": "https://alwaysfirst.in/api/icons/36.png"},
-        //             {"id": 8348,"name": "Crime","icon": "https://alwaysfirst.in/api/icons/8348.png"},
-        //             {"id": 8096,"name": "Defence","icon": "https://alwaysfirst.in/api/icons/8096.png"},
-        //             {"id": 131,"name": "Entertainment","icon": "https://alwaysfirst.in/api/icons/131.png"},
-        //             {"id": 12849,"name": "Environment","icon": "https://alwaysfirst.in/api/icons/12849.png"},
-        //             {"id": 3490,"name": "Featured Stories","icon": "https://alwaysfirst.in/api/icons/3490.png"},
-        //             {"id": 92,"name": "Handloom & Handicraft","icon": "https://alwaysfirst.in/api/icons/92.png"},
-        //             {"id": 159,"name": "Health","icon": "https://alwaysfirst.in/api/icons/159.png"},
-        //             {"id": 27,"name": "Lifestyle","icon": "https://alwaysfirst.in/api/icons/27.png"},
-        //             {"id": 8403,"name": "National","icon": "https://alwaysfirst.in/api/icons/8403.png"},
-        //             {"id": 2639,"name": "Science & Tech","icon": "https://alwaysfirst.in/api/icons/2639.png"},
-        //             {"id": 16,"name": "Sports","icon": "https://alwaysfirst.in/api/icons/16.png"},
-        //             {"id": 65,"name": "World","icon": "https://alwaysfirst.in/api/icons/65.png"}
-        //         ]';
-        // $json_data = json_decode($json, true);
-        // return $json_data;
+            //             {"id": 35,"name": "Art & Culture","icon": "https://alwaysfirst.in/api/icons/35.png"},
+            //             {"id": 162,"name": "Bollywood","icon": "https://alwaysfirst.in/api/icons/162.png"},
+            //             {"id": 36,"name": "Business","icon": "https://alwaysfirst.in/api/icons/36.png"},
+            //             {"id": 8248,"name": "Crime","icon": "https://alwaysfirst.in/api/icons/8248.png"},
+            //             {"id": 8096,"name": "Defence","icon": "https://alwaysfirst.in/api/icons/8096.png"},
+            //             {"id": 131,"name": "Entertainment","icon": "https://alwaysfirst.in/api/icons/131.png"},
+            //             {"id": 12849,"name": "Environment","icon": "https://alwaysfirst.in/api/icons/12849.png"},
+            //             {"id": 3490,"name": "Featured Stories","icon": "https://alwaysfirst.in/api/icons/3490.png"},
+            //             {"id": 92,"name": "Handloom & Handicraft","icon": "https://alwaysfirst.in/api/icons/92.png"},
+            //             {"id": 159,"name": "Health","icon": "https://alwaysfirst.in/api/icons/159.png"},
+            //             {"id": 27,"name": "Lifestyle","icon": "https://alwaysfirst.in/api/icons/27.png"},
+            //             {"id": 8403,"name": "National","icon": "https://alwaysfirst.in/api/icons/8403.png"},
+            //             {"id": 2639,"name": "Science & Tech","icon": "https://alwaysfirst.in/api/icons/2639.png"},
+            //             {"id": 16,"name": "Sports","icon": "https://alwaysfirst.in/api/icons/16.png"},
+            //             {"id": 65,"name": "World","icon": "https://alwaysfirst.in/api/icons/65.png"}
+            //         ]';
+            // $json_data = json_decode($json, true);
+            // return $json_data;
     }
     public function getUserCategorySetting($user_id){
         $cat_data = $this->db->query("SELECT * FROM `category_setting`")->result_array();
@@ -687,6 +688,7 @@ class Model extends CI_Model
                     'id' => (int)$value['cat_id'],
                     'name' => $value['name'],
                     'icon' => $value['icon_link'],
+                    'color' => $value['color'],
                     'is_selected' => true,
                 );
             }else {
@@ -694,6 +696,7 @@ class Model extends CI_Model
                     'id' => (int)$value['cat_id'],
                     'name' => $value['name'],
                     'icon' => $value['icon_link'],
+                    'color' => $value['color'],
                     'is_selected' => false,
                 );
             }
