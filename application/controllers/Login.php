@@ -164,7 +164,7 @@ class Login extends CI_Controller
                 if ($result) {
                     $json = array('status' => 200, 'message' => 'User category list.', 'data' => $result);
                 } else {
-                    $json = array('status' => 401, 'message' => 'No category found.' , 'data' => NULL);
+                    $json = array('status' => 401, 'message' => 'No category found.' , 'data' => '');
                 }
             } else {
                 $json = array('status' => 400, 'message' => 'parameter missing.');
@@ -184,7 +184,7 @@ class Login extends CI_Controller
                 if ($result) {
                     $json = array('status' => 200, 'message' => 'User category list.', 'data' => $result);
                 } else {
-                    $json = array('status' => 401, 'message' => 'No category found.' , 'data' => NULL);
+                    $json = array('status' => 401, 'message' => 'No category found.' , 'data' => '');
                 }
             } else {
                 $json = array('status' => 400, 'message' => 'parameter missing.');
@@ -295,5 +295,26 @@ class Login extends CI_Controller
             }
         }
         echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
+    public function deleteUser(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 405, 'message' => 'Method Not Allowed.');
+        } else {
+            if(isset($post_data['user_id'])){
+                $user_id = $post_data['user_id'];
+                $result = $this->LoginModel->deleteUser($user_id);
+                if($result){
+                    $json = array('status' => 200, 'message' => 'Success');
+                }else{
+                    $json = array('status' => 401, 'message' => 'Invalid user id.');
+                }
+            }else{
+                $json = array('status' => 400, 'message' => 'Parameter missing.');
+            }
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+
     }
 }

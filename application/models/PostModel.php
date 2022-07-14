@@ -78,9 +78,12 @@ class PostModel extends CI_Model
             $post_content = strip_tags($post_content, '<img><iframe>');
             $post_content = strip_tags($post_content, '');
             // Ignore 61 characters from the start of the post
-            if (str_contains($value['Categories_id'], '3632')) { 
+            if (str_contains($value['Categories_id'], '3632')) {
+
             }else{
-                $post_content = substr($post_content, 61);
+                if ((int)$value['author_id'] == 1) {
+                    $post_content = substr($post_content, 61);
+                }
             }
             // Remove ad tags
             $post_content = str_replace("[ad_1]", "", $post_content);
@@ -164,14 +167,16 @@ class PostModel extends CI_Model
                                 'post_data' => $result[$rel1]['post_data'],
                                 'author' => $result[$rel1]['author'],
                                 'category' => $result[$rel1]['category'],
-                                'tags' => $result[$rel1]['tags']
+                                'tags' => $result[$rel1]['tags'],
+                                'ads' => $ads
                             ),
                             array(
                                 'id' => $result[$rel2]['id'],
                                 'post_data' => $result[$rel2]['post_data'],
                                 'author' => $result[$rel2]['author'],
                                 'category' => $result[$rel2]['category'],
-                                'tags' => $result[$rel2]['tags']
+                                'tags' => $result[$rel2]['tags'],
+                                'ads' => $ads
                             ),
                         )
                     );

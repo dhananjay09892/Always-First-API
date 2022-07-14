@@ -17,13 +17,20 @@ class LoginModel extends CI_Model
                 // User logged in
                 $app_data_user = $this->db->get_where('app_data', array('email' => $email))->result_array();
                 $app_data_user = $app_data_user[count($app_data_user) - 1];
-                $result = array(
-                    'user_id' => (int)$app_data_user['user_id'],
-                    'email' => $app_data_user['email'],
-                    'name' => $user['display_name'],
-                    'category' => $app_data_user['category']
-                );
-                return $result;
+                if($app_data_user['isVerified'] == 0){
+                    $this->forgotPassword($app_data_user['email']);
+                    $data['message'] = 'OTP has been sent to your email';
+                    return array('isVerified' => false, 'message' => $data['message']);
+                }else{
+                    $result = array(
+                        'user_id' => (int)$app_data_user['user_id'],
+                        'email' => $app_data_user['email'],
+                        'name' => $app_data_user['name'],
+                        'category' => $app_data_user['category'],
+                        'isVerified' => true
+                    );
+                    return $result;
+                }
             } else {
                 // Password does not match
                 return false;
@@ -102,17 +109,19 @@ class LoginModel extends CI_Model
                 'email' => $post_data['email'],
                 'name' => $post_data['name'],
                 'password' => password_hash($post_data['password'], PASSWORD_DEFAULT),
-                'old_password' => NULL,
+                'old_password' => '',
                 'device_id' => $device_id,
                 'device_token' => $device_token,
-                'category' => NULL,
+                'category' => '',
                 'login_type' => $login_type,
-                'OTP' => NULL,
+                'OTP' => '',
                 'Created_at' => date('Y-m-d H:i:s'),
+                'isVerified' => 0
             );
             $this->db->insert('app_data', $app_data);
             $this->forgotPassword($post_data['email']);
             $data['message'] = 'OTP has been sent to your email';
+            $data['category'] = '';
             return $data;
         }
         return false;
@@ -164,7 +173,7 @@ class LoginModel extends CI_Model
         $query = $this->db->get('app_data');
         $user = $query->row();
         $c = $user->category;
-        if($c!=NULL){
+        if ($c != NULL || $c != '') {
             $category = explode(',', $c);
             foreach ($category as $cat) {
                 $catN = $this->db->get_where('wp5q_terms', array('term_id' => $cat))->row();
@@ -175,14 +184,25 @@ class LoginModel extends CI_Model
             }
             return $result;
         }else{
-            $cNew = "154,114,43,94,166,101,80";
-            $category = explode(',', $cNew);
-            foreach ($category as $cat) {
-                $catN = $this->db->get_where('wp5q_terms', array('term_id' => $cat))->row();
-                $catX['name'] = $catN->name;
-                $catX['id'] = $cat;
+            // get all data from category_setting table 
+            // $this->db->where('user_id', $user_id);
+            $query = $this->db->get('category_setting');
+            $user = $query->result_array();
+            foreach ($user as $cat) {
+                $catN = $this->db->get_where('wp5q_terms', array('term_id' => $cat['cat_id']))->row();
+                $catname = $catN->name;
+                $catX['name'] = html_entity_decode($catname);
+                $catX['id'] = $cat['cat_id'];
                 $result[] = $catX;
             }
+            // $cNew = "154,114,43,94,166,101,80";
+            // $category = explode(',', $cNew);
+            // foreach ($category as $cat) {
+            //     $catN = $this->db->get_where('wp5q_terms', array('term_id' => $cat))->row();
+            //     $catX['name'] = $catN->name;
+            //     $catX['id'] = $cat;
+            //     $result[] = $catX;
+            // }
             return $result;
         }
     }
@@ -235,9 +255,9 @@ class LoginModel extends CI_Model
                 'user_id' => $user_id
             );
             if($user_otp == $OTP){
-                // replace otp with null
                 $this->db->where('user_id', $user_id);
-                $this->db->update('app_data', array('OTP' => NULL));
+                // update isVerified to 1 and OTP to NULL
+                $this->db->update('app_data', array('isVerified' => 1, 'OTP' => ''));
                 return $result;
             }else{
                 return false;
@@ -303,5 +323,20 @@ class LoginModel extends CI_Model
             $this->db->update('app_data', array('email' => $email));
         }
         return true;
+    }
+    public function deleteUser($user_id){
+        // check if user is exist in wp5q_users and app_data and wp5q_usermeta
+        $user = $this->db->get_where('app_data', array('user_id' => $user_id))->result_array();
+        if (count($user) >= 1) {
+            $this->db->where('ID', $user_id);
+            $this->db->delete('wp5q_users');
+            $this->db->where('user_id', $user_id);
+            $this->db->delete('app_data');
+            $this->db->where('user_id', $user_id);
+            $this->db->delete('wp5q_usermeta');
+            return true;
+        } else {
+            return false;
+        }
     }
 }

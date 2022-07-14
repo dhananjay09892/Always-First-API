@@ -17,7 +17,7 @@ $route['bottomPosts'] = 'test/getBottomPosts';
 
 // Always Last Old Api Routes
 $route['getCategory'] = 'test/getCategory';
-$route['getMenuCategory'] = 'test/getMenuCategory';
+$route['getMenuCategory'] = 'login/getUserCategoryNew';
 
 // Getting JSON data from Live Server
 $route['getCats'] = 'test/getCats';
@@ -68,3 +68,15 @@ $route['updateProfile'] = 'login/updateProfile'; // Done
 
 $route['getCategorySetting'] = 'test/getCategorySetting'; // Done
 $route['getUserCategorySetting'] = 'test/getUserCategorySetting'; // Done
+
+// Get Astro APIS 
+$route['getHoroscopeToday'] = 'astro/getHoroscopeToday'; // Done
+$route['getHoroscopeTomorrow'] = 'astro/getHoroscopeTomorrow'; // Done
+$route['getHoroscopeYesterday'] = 'astro/getHoroscopeYesterday'; // Done
+$route['getHoroscopeMonth'] = 'astro/getHoroscopeMonth'; // Done
+$route['getHoroscope'] = 'astro/getHoroscope'; // Done
+
+$route['astrology'] = 'astrology'; // Done
+$route['astrology/today'] = 'astrology/today'; // Done
+
+$route['deleteUser'] = 'login/deleteUser'; // Done
