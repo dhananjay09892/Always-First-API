@@ -5,14 +5,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class AstroModel extends CI_Model{
     public function getHoroscopeToday(){
         $today = date('Y-m-d');
-        $sql = "SELECT t1.*, t2.name, t2.image FROM daily_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$today'";
+        $sql = "SELECT t2.name, t2.image, t2.name_eng, t1.* FROM daily_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$today'";
         $query = $this->db->query($sql);
         $result = $query->result_array();
         if(empty($result)){
             $url = 'https://alwaysfirst.in/astroGet/getData.php';
             exec("curl -X POST -d 'url=$url' $url");
             // $this->curl->simple_get($url);
-            $sql = "SELECT t1.*, t2.name,t2.image FROM daily_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$today'";
+            $sql = "SELECT t2.name, t2.image, t2.name_eng, t1.* FROM daily_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$today'";
             $query = $this->db->query($sql);
             $result = $query->result_array();
             return $result;
@@ -22,21 +22,21 @@ class AstroModel extends CI_Model{
     }
     public function getHoroscopeYesterday(){
         $yesterday = date('Y-m-d', strtotime('-1 days'));
-        $sql = "SELECT t2.name, t2.image, t1.*  FROM daily_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$yesterday'";
+        $sql = "SELECT t2.name, t2.image, t2.name_eng, t1.*  FROM daily_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$yesterday'";
         $query = $this->db->query($sql);
         $result = $query->result_array();
         return $result;
     }
     public function getHoroscopeTomorrow(){
         $tomorrow = date('Y-m-d', strtotime('+1 day'));
-        $sql = "SELECT t1.*, t2.name, t2.image FROM next_day_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$tomorrow'";
+        $sql = "SELECT t2.name, t2.image, t2.name_eng, t1.* FROM next_day_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$tomorrow'";
         $query = $this->db->query($sql);
         $result = $query->result_array();
         if(empty($result)){
             $url = 'https://alwaysfirst.in/astroGet/getDataTo.php';
             exec("curl -X POST -d 'url=$url' $url");
             // $this->curl->simple_get($url);
-            $sql = "SELECT t1.*, t2.name,t2.image FROM next_day_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$tomorrow'";
+            $sql = "SELECT t2.name, t2.image, t2.name_eng, t1.* FROM next_day_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$tomorrow'";
             $query = $this->db->query($sql);
             $result = $query->result_array();
             return $result;
@@ -47,19 +47,19 @@ class AstroModel extends CI_Model{
     public function getHoroscopeMonth(){
         $month = date("F");
         $year = date("Y");
-        $sql = "SELECT t1.*, t2.name, t2.image FROM astro_monthly_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.month='$month' AND t1.year='$year'";
+        $sql = "SELECT t2.name, t2.image, t2.name_eng, t1.* FROM astro_monthly_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.month='$month' AND t1.year='$year'";
         $query = $this->db->query($sql);
         $result = $query->result_array();
         if(empty($result)){
             $url = 'https://alwaysfirst.in/astroGet/getDataMonth.php';
             exec("curl -X POST -d 'url=$url' $url");
             // $this->curl->simple_get($url);
-            $sql = "SELECT t1.*, t2.name,t2.image FROM astro_monthly_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.month='$month' AND t1.year='$year'";
+            $sql = "SELECT t2.name, t2.image, t2.name_eng, t1.* FROM astro_monthly_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.month='$month' AND t1.year='$year'";
             $query = $this->db->query($sql);
             $result = $query->result_array();
             // return $result;
         }else {
-            return $result;
+            // return $result;
         }
         foreach($result as $row){
             $normal_horoscope = $row['normal_horoscope'];
@@ -91,13 +91,10 @@ class AstroModel extends CI_Model{
             $remedy_title = explode("HOROSCOPE_TITLE", $remedy_title)[1];
             $remedy_data = explode("HOROSCOPE_DATA", $remedy)[1];
             $image = $row['image'];
-            $rashi_eng = $row['image'];
-            $rashi_eng = str_replace(".png", "", $rashi_eng);
-            $rashi_eng = str_replace("https://alwaysfirst.in/api/icons/", "", $rashi_eng);
             $data[] = array(
                 'id' => $row['id'],
                 'rashi_id' => $row['rashi_id'],
-                'rashi_eng' => $rashi_eng,
+                'name_eng' => $row['name_eng'],
                 'name' => $row['name'],
                 'image' => $image,
                 'month' => $row['month'],
@@ -123,12 +120,15 @@ class AstroModel extends CI_Model{
         foreach ($todayHoroscope as $key => $value) {
             $result[] = array(
                 'name' => $value['name'],
-                'rashi_eng' => $monthHoroscope[$key]['rashi_eng'],
+                'name_eng' => $monthHoroscope[$key]['name_eng'],
                 'rashi_id' => $value['rashi_id'],
                 'image' => $monthHoroscope[$key]['image'],
                 'today' => array(
                     'id' => $value['id'],
                     'date' => $value['date'],
+                    'name' => $value['name'],
+                    'name_eng' => $monthHoroscope[$key]['name_eng'],
+                    'image' => $monthHoroscope[$key]['image'],
                     'horoscope' => $value['horoscope'],
                     'lucky_number' => $value['lucky_number'],
                     'lucky_color' => $value['lucky_color'],
@@ -137,6 +137,9 @@ class AstroModel extends CI_Model{
                 'yesterday' => array(
                     'id' => $yesterdayHoroscope[$key]['id'],
                     'date' => $yesterdayHoroscope[$key]['date'],
+                    'name' => $value['name'],
+                    'name_eng' => $monthHoroscope[$key]['name_eng'],
+                    'image' => $monthHoroscope[$key]['image'],
                     'horoscope' => $yesterdayHoroscope[$key]['horoscope'],
                     'lucky_number' => $yesterdayHoroscope[$key]['lucky_number'],
                     'lucky_color' => $yesterdayHoroscope[$key]['lucky_color'],
@@ -145,6 +148,9 @@ class AstroModel extends CI_Model{
                 'tomorrow' => array(
                     'id' => $tomorrowHoroscope[$key]['id'],
                     'date' => $tomorrowHoroscope[$key]['date'],
+                    'name' => $value['name'],
+                    'name_eng' => $monthHoroscope[$key]['name_eng'],
+                    'image' => $monthHoroscope[$key]['image'],
                     'horoscope' => $tomorrowHoroscope[$key]['horoscope'],
                     'lucky_number' => $tomorrowHoroscope[$key]['lucky_number'],
                     'lucky_color' => $tomorrowHoroscope[$key]['lucky_color'],
@@ -154,6 +160,9 @@ class AstroModel extends CI_Model{
                     'id' => $monthHoroscope[$key]['id'],
                     'month' => $monthHoroscope[$key]['month'],
                     'year' => $monthHoroscope[$key]['year'],
+                    'name' => $value['name'],
+                    'name_eng' => $monthHoroscope[$key]['name_eng'],
+                    'image' => $monthHoroscope[$key]['image'],
                     'horoscope' => $monthHoroscope[$key]['horoscope'],
                 )
             );
