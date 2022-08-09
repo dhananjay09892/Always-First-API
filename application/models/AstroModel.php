@@ -2,13 +2,14 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 
-class AstroModel extends CI_Model{
+class AstroModel extends CI_Model
+{
     public function getHoroscopeToday(){
         $today = date('Y-m-d');
         $sql = "SELECT t2.name, t2.image, t2.name_eng, t1.* FROM daily_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$today'";
         $query = $this->db->query($sql);
         $result = $query->result_array();
-        if(empty($result)){
+        if (empty($result)) {
             $url = 'https://alwaysfirst.in/astroGet/getData.php';
             exec("curl -X POST -d 'url=$url' $url");
             // $this->curl->simple_get($url);
@@ -16,7 +17,7 @@ class AstroModel extends CI_Model{
             $query = $this->db->query($sql);
             $result = $query->result_array();
             return $result;
-        }else {
+        } else {
             return $result;
         }
     }
@@ -32,7 +33,7 @@ class AstroModel extends CI_Model{
         $sql = "SELECT t2.name, t2.image, t2.name_eng, t1.* FROM next_day_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.date='$tomorrow'";
         $query = $this->db->query($sql);
         $result = $query->result_array();
-        if(empty($result)){
+        if (empty($result)) {
             $url = 'https://alwaysfirst.in/astroGet/getDataTo.php';
             exec("curl -X POST -d 'url=$url' $url");
             // $this->curl->simple_get($url);
@@ -40,7 +41,7 @@ class AstroModel extends CI_Model{
             $query = $this->db->query($sql);
             $result = $query->result_array();
             return $result;
-        }else {
+        } else {
             return $result;
         }
     }
@@ -50,7 +51,7 @@ class AstroModel extends CI_Model{
         $sql = "SELECT t2.name, t2.image, t2.name_eng, t1.* FROM astro_monthly_horoscope as t1 LEFT JOIN rashi as t2 ON t1.rashi_id = t2.id WHERE t1.month='$month' AND t1.year='$year'";
         $query = $this->db->query($sql);
         $result = $query->result_array();
-        if(empty($result)){
+        if (empty($result)) {
             $url = 'https://alwaysfirst.in/astroGet/getDataMonth.php';
             exec("curl -X POST -d 'url=$url' $url");
             // $this->curl->simple_get($url);
@@ -58,10 +59,10 @@ class AstroModel extends CI_Model{
             $query = $this->db->query($sql);
             $result = $query->result_array();
             // return $result;
-        }else {
+        } else {
             // return $result;
         }
-        foreach($result as $row){
+        foreach ($result as $row) {
             $normal_horoscope = $row['normal_horoscope'];
             $normal_horoscope_title = explode("HOROSCOPE_DATA", $normal_horoscope)[0];
             $normal_horoscope_title = explode("HOROSCOPE_TITLE", $normal_horoscope_title)[1];
@@ -120,6 +121,7 @@ class AstroModel extends CI_Model{
         foreach ($todayHoroscope as $key => $value) {
             $result[] = array(
                 'name' => $value['name'],
+                'rashi_eng' => $value['name_eng'],
                 'name_eng' => $monthHoroscope[$key]['name_eng'],
                 'rashi_id' => $value['rashi_id'],
                 'image' => $monthHoroscope[$key]['image'],
@@ -127,6 +129,7 @@ class AstroModel extends CI_Model{
                     'id' => $value['id'],
                     'date' => $value['date'],
                     'name' => $value['name'],
+                    'rashi_eng' => $value['name_eng'],
                     'name_eng' => $monthHoroscope[$key]['name_eng'],
                     'image' => $monthHoroscope[$key]['image'],
                     'horoscope' => $value['horoscope'],
@@ -138,6 +141,7 @@ class AstroModel extends CI_Model{
                     'id' => $yesterdayHoroscope[$key]['id'],
                     'date' => $yesterdayHoroscope[$key]['date'],
                     'name' => $value['name'],
+                    'rashi_eng' => $value['name_eng'],
                     'name_eng' => $monthHoroscope[$key]['name_eng'],
                     'image' => $monthHoroscope[$key]['image'],
                     'horoscope' => $yesterdayHoroscope[$key]['horoscope'],
@@ -149,6 +153,7 @@ class AstroModel extends CI_Model{
                     'id' => $tomorrowHoroscope[$key]['id'],
                     'date' => $tomorrowHoroscope[$key]['date'],
                     'name' => $value['name'],
+                    'rashi_eng' => $value['name_eng'],
                     'name_eng' => $monthHoroscope[$key]['name_eng'],
                     'image' => $monthHoroscope[$key]['image'],
                     'horoscope' => $tomorrowHoroscope[$key]['horoscope'],
@@ -161,12 +166,136 @@ class AstroModel extends CI_Model{
                     'month' => $monthHoroscope[$key]['month'],
                     'year' => $monthHoroscope[$key]['year'],
                     'name' => $value['name'],
+                    'rashi_eng' => $value['name_eng'],
                     'name_eng' => $monthHoroscope[$key]['name_eng'],
                     'image' => $monthHoroscope[$key]['image'],
                     'horoscope' => $monthHoroscope[$key]['horoscope'],
                 )
             );
         }
+        return $result;
+    }
+    public function jokes($post_data){
+        $before_days = isset($post_data['before_days']) ? $post_data['before_days'] - 1 : 0;
+        // check before days between 0 and 365
+        if ($before_days > 365) {
+            $before_days = 365;
+        } else if ($before_days < 0) {
+            $before_days = 0;
+        } 
+        $today = date('Y-m-d');
+        // Getting Before Date
+        $before_days_date = date('Y-m-d', strtotime('-' . $before_days . ' days'));
+        $sql = "SELECT * FROM `aaws_jokes` WHERE `date` BETWEEN '$before_days_date' AND '$today' ORDER BY `date` DESC";
+        $query = $this->db->query($sql);
+        $result = $query->result_array();
+        return $result;
+    }
+    public function quotes($post_data){
+        $before_days = isset($post_data['before_days']) ? $post_data['before_days'] - 1 : 0;
+        // check before days between 0 and 365
+        if ($before_days > 365) {
+            $before_days = 365;
+        } else if ($before_days < 0) {
+            $before_days = 0;
+        } 
+        $today = date('Y-m-d');
+        // Getting Before Date
+        $before_days_date = date('Y-m-d', strtotime('-' . $before_days . ' days'));
+        $sql = "SELECT * FROM `aaws_quotes` WHERE `date` BETWEEN '$before_days_date' AND '$today' ORDER BY `date` DESC";
+        $query = $this->db->query($sql);
+        $result = $query->result_array();
+        return $result;
+    }
+    public function photos($post_data){
+        $before_days = isset($post_data['before_days']) ? $post_data['before_days'] - 1 : 0;
+        // check before days between 0 and 365
+        if ($before_days > 365) {
+            $before_days = 365;
+        } else if ($before_days < 0) {
+            $before_days = 0;
+        } 
+        $today = date('Y-m-d');
+        // Getting Before Date
+        $before_days_date = date('Y-m-d', strtotime('-' . $before_days . ' days'));
+        $sql = "SELECT * FROM `aaws_photos` WHERE `date` BETWEEN '$before_days_date' AND '$today' ORDER BY `date` DESC";
+        $query = $this->db->query($sql);
+        $result = $query->result_array();
+        return $result;
+    }
+    public function quotesToday(){
+        $date = date('j');
+        $month = date('F');
+        $day = date('l');
+        $year = date('Y');
+        $sql = "SELECT * FROM `aaws_inc_quotes_2022` WHERE `date` = '$date' AND `month` = '$month' AND `day` = '$day' AND `year` = '$year'";
+        $query = $this->db->query($sql);
+        $result = $query->result_array();
+        return $result;
+    }
+    public function jki($post_data){
+        $before_days = isset($post_data['before_days']) ? ($post_data['before_days'] == 0 ? 0 : $post_data['before_days'] - 1) : 0;
+        if($before_days == 0){
+            $jokes_data = $this->jokes($post_data);
+            $result['jokes'] = array(
+                'name' => 'Jokes',
+                'link' => 'https://www.alwaysfirst.in/jokes/',
+                'image' => $jokes_data[0]['image'],
+            );
+            $quotes_data = $this->quotes($post_data);
+            $result['quotes'] = array(
+                'name' => 'Quotes',
+                'link' => ' https://www.alwaysfirst.in/quotes/',
+                'image' => $quotes_data[0]['image'],
+            );
+            $photos_data = $this->photos($post_data);
+            $result['photos'] = array(
+                'name' => 'Photos',
+                'link' => 'https://www.alwaysfirst.in/photos/',
+                'image' => $photos_data[0]['image'],
+            );
+        }else{
+            $result['jokes'] = $this->jokes($post_data);
+            $result['quotes'] = $this->quotes($before_days);
+            $result['photos'] = $this->photos($before_days);
+        }
+        return $result;
+    }
+    public function jqi($post_data){
+        $post_data['before_days'] = isset($post_data['before_days']) ? $post_data['before_days'] - 1 : 7;
+        $jokes_data = $this->jokes($post_data);
+        // maping jokes data
+        $jokes = array();
+        foreach ($jokes_data as $key => $value) {
+            $jokes[$key]['id'] = $value['id'];
+            $jokes[$key]['image'] = $value['image'];
+        }
+        $result[] = array(
+            'name' => 'Jokes',
+            'data' => $jokes,
+        );
+        $quotes_data = $this->quotes($post_data);
+        // maping quotes data
+        $quotes = array();
+        foreach ($quotes_data as $key => $value) {
+            $quotes[$key]['id'] = $value['id'];
+            $quotes[$key]['image'] = $value['image'];
+        }
+        $result[] = array(
+            'name' => 'Quotes',
+            'data' => $quotes,
+        );
+        $photos_data = $this->photos($post_data);
+        // maping photos data
+        $photos = array();
+        foreach ($photos_data as $key => $value) {
+            $photos[$key]['id'] = $value['id'];
+            $photos[$key]['image'] = $value['image'];
+        }
+        $result[] = array(
+            'name' => 'Photos',
+            'data' => $photos,
+        );
         return $result;
     }
 }

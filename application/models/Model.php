@@ -655,6 +655,7 @@ class Model extends CI_Model
                 'name' => $value['name'],
                 'icon' => $value['icon_link'],
                 'color' => $value['color'],
+                'is_selected' => false,
             );
         }
         return $result;

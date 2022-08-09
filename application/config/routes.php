@@ -47,6 +47,7 @@ $route['register'] = 'login/register'; // Done
 $route['socialLogin'] = 'login/socialLogin'; // Done
 // post Data = array('name'=>,'email'=>'','device_id'=>'','device_token'=>'','login_type'=>'');
 $route['getUserCategory'] = 'login/getUserCategory'; // Done
+// https://www.alwaysfirst.in/api/getUserCategory
 // post Data = array('user_id'=>'');
 $route['postUserCategory'] = 'login/postUserCategory'; // Done
 // post Data = array('user_id'=>'','category'=>'');
@@ -80,3 +81,15 @@ $route['astrology'] = 'astrology'; // Done
 $route['astrology/today'] = 'astrology/today'; // Done
 
 $route['deleteUser'] = 'login/deleteUser'; // Done
+
+
+$route['jokes'] = 'astro/jokes'; // Done
+$route['quotes'] = 'astro/quotes'; // Done
+$route['photos'] = 'astro/photos'; // Done
+$route['quotes/today'] = 'astro/quotesToday'; // Done
+$route['jki'] = 'astro/jki'; // Done
+$route['jqi'] = 'astro/jqi'; // Done
+// $route['']
+
+
+

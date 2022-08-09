@@ -1,7 +1,6 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-
 class PostModel extends CI_Model
 {
     public function Ads(){
@@ -77,7 +76,7 @@ class PostModel extends CI_Model
             // Strip HTML tags 
             $post_content = strip_tags($post_content, '<img><iframe>');
             $post_content = strip_tags($post_content, '');
-            // Ignore 61 characters from the start of the post
+            // Ignore 61 characters from the start of the post content
             if (str_contains($value['Categories_id'], '3632')) {
 
             }else{

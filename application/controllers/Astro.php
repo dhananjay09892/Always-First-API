@@ -66,4 +66,75 @@ class Astro extends CI_Controller{
         }
         echo json_encode($json, JSON_UNESCAPED_UNICODE);
     }
+    public function jokes(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 400, 'message' => 'Bad request.');
+        } else {
+            $json = $this->AstroModel->jokes($post_data);
+            $json = empty($json) ? array('No data found') : $json;
+            $json = array("status" => 200, "message" => "success", "body" => $json);
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
+    public function quotes(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 400, 'message' => 'Bad request.');
+        } else {
+            $json = $this->AstroModel->quotes($post_data);
+            $json = empty($json) ? array('No data found') : $json;
+            $json = array("status" => 200, "message" => "success", "body" => $json);
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
+    public function photos(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 400, 'message' => 'Bad request.');
+        } else {
+            $json = $this->AstroModel->photos($post_data);
+            $json = empty($json) ? array('No data found') : $json;
+            $json = array("status" => 200, "message" => "success", "body" => $json);
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
+    public function quotesToday(){
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 400, 'message' => 'Bad request.');
+        } else {
+            $json = $this->AstroModel->quotesToday();
+            $json = empty($json) ? array('No data found') : $json;
+            $json = array("status" => 200, "message" => "success", "body" => $json);
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
+    public function jki(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 400, 'message' => 'Bad request.');
+        } else {
+            $json = $this->AstroModel->jki($post_data);
+            $json = empty($json) ? array('No data found') : $json;
+            $json = array("status" => 200, "message" => "success", "body" => $json);
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
+    public function jqi(){
+        $post_data = $this->input->post();
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method != 'POST') {
+            $json = array('status' => 400, 'message' => 'Bad request.');
+        } else {
+            $json = $this->AstroModel->jqi($post_data);
+            $json = empty($json) ? array('No data found') : $json;
+            $json = array("status" => 200, "message" => "success", "body" => $json);
+        }
+        echo json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
 }
